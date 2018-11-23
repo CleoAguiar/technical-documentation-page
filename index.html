@@ -128,6 +128,22 @@
                 <p>At first the network is naive, it doesn't know the function mapping the inputs to the outputs. We train the network by showing it examples of real data, then adjusting the network parameters such that it approximates this function.</p>
                 <p>To find these parameters, we need to know how poorly the network is predicting the real outputs. For this we calculate a loss function (also called the cost), a measure of our prediction error. For example, the mean squared loss is often used in regression and binary classification problems</p>
                 <p>By minimizing this loss with respect to the network parameters, we can find configurations where the loss is at a minimum and the network is able to predict the correct labels with high accuracy. We find this minimum using a process called gradient descent. The gradient is the slope of the loss function and points in the direction of fastest change. To get to the minimum in the least amount of time, we then want to follow the gradient (downwards). You can think of this like descending a mountain by following the steepest slope to the base.</p>
+                <h1>Training the network!</h1>
+                <p>There's one last piece we need to start training, an optimizer that we'll use to update the weights with the gradients. We get these from PyTorch's optim package. For example we can use stochastic gradient descent with optim.SGD. You can see how to define an optimizer below.</p>
+                <pre>
+                    <code class="python">
+                        from torch import optim
+                        # Optimizers require the parameters to optimize and a learning rate
+                        optimizer = optim.SGD(model.parameters(), lr=0.01)
+                    </code>
+                </pre>
+                <p>Now we know how to use all the individual parts so it's time to see how they work together. Let's consider just one learning step before looping through all the data. The general process with PyTorch:</p>
+                <ul>
+                    <li>Make a forward pass through the network</li>
+                    <li>Use the network output to calculate the loss</li>
+                    <li>Perform a backward pass through the network with loss.backward() to calculate the gradients</li>
+                    <li>Take a step with the optimizer to update the weights</li>
+                </ul>
             </article>
         </section>
         
@@ -163,6 +179,15 @@
                         helper.imshow(image[0,:]);
                     </code>
                 </pre>
+                <h1>Train the network</h1>
+                <p>Now you should create your network and train it. First you'll want to define the criterion ( something like <code>nn.CrossEntropyLoss</code>) and the optimizer (typically <code>optim.SGD</code> or <code>optim.Adam</code>).</p>
+                <p>Then write the training code. Remember the training pass is a fairly straightforward process:</p>
+                <ul>
+                    <li>Make a forward pass through the network to get the logits</li>
+                    <li>Use the logits to calculate the loss</li>
+                    <li>Perform a backward pass through the network with <code>loss.backward()</code> to calculate the gradients</li>
+                    <li>Take a step with the optimizer to update the weights</li>
+                </ul>
             </article>
         </section>
         
