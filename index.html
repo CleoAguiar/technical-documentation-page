@@ -8,28 +8,28 @@
     <nav id="navbar">
         <header>Neural Network with Pytorch</header>
         <ul>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Tensors_in_PyTorch" rel="internal">
                 <li>Tensors in PyTorch</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Neural_Networks_in_PyTorch" rel="internal">
                 <li>Neural Networks in PyTorch</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Training_Neural_Networks" rel="internal">
                 <li>Training Neural Networks</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Fashion-MNIST" rel="internal">
                 <li>Fashion-MNIST</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Inference_and_Validation" rel="internal">
                 <li>Inference and Validation</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Saving_and_Loading_Models" rel="internal">
                 <li>Saving and Loading Models</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Loading_Image_Data" rel="internal">
                 <li>Loading Image Data</li>
             </a>
-            <a class="nav-link" href="" rel="internal">
+            <a class="nav-link" href="#Transfer_Leaning" rel="internal">
                 <li>Transfer Leaning</li>
             </a>
         </ul>
@@ -40,41 +40,120 @@
         <!-- Tensors in PyTorch Section -->
         <section class="main-section" id="Tensors_in_PyTorch">
             <header>Tensors in PyTorch</header>
+            <article>
+                <h1>Introduction to Deep Learning with PyTorch</h1>
+                <p>PyTorch in a lot of ways behaves like the arrays you love from Numpy. These Numpy arrays, after all, are just tensors. PyTorch takes these tensors and makes it simple to move them to GPUs for the faster processing needed when training neural networks. It also provides a module that automatically calculates gradients (for backpropagation!) and another module specifically for building neural networks. All together, PyTorch ends up being more coherent with Python and the Numpy/Scipy stack compared to TensorFlow and other frameworks.</p>
+                <h1>Neural Networks</h1>
+                <p>Deep Learning is based on artificial neural networks which have been around in some form since the late 1950s. The networks are built from individual parts approximating neurons, typically called units or simply "neurons." Each unit has some number of weighted inputs. These weighted inputs are summed together (a linear combination) then passed through an activation function to get the unit's output.</p>
+                <h1>Tensors</h1>
+                <p>It turns out neural network computations are just a bunch of linear algebra operations on tensors, a generalization of matrices. A vector is a 1-dimensional tensor, a matrix is a 2-dimensional tensor, an array with three indices is a 3-dimensional tensor (RGB color images for example). The fundamental data structure for neural networks are tensors and PyTorch (as well as pretty much every other deep learning framework) is built around tensors.</p>
+                <p>With the basics covered, it's time to explore how we can use PyTorch to build a simple neural network.</p>
+                <pre>
+                    <code class="python">
+                            import torch
+                            def activation(x):
+                                """ Sigmoid activation function
+                                    Arguments
+                                    ---------
+                                    x: torch.Tensor
+                                """
+                                return 1/(1+torch.exp(-x))
+                    </code>
+                </pre>
+
+                 <pre>
+                    <code class="python">
+                            ### Generate some data
+                            torch.manual_seed(7) # Set the random seed so things are predictable
+
+                            # Features are 3 random normal variables
+                            features = torch.randn((1, 5))
+                            # True weights for our data, random normal variables again
+                            weights = torch.randn_like(features)
+                            # and a true bias term
+                            bias = torch.randn((1, 1))
+                    </code>
+                </pre>
+                <p>Above I generated data we can use to get the output of our simple network. This is all just random for now, going forward we'll start using normal data. Going through each relevant line: <code>features = torch.randn((1, 5))</code> creates a tensor with shape (1, 5), one row and five columns, that contains values randomly distributed according to the normal distribution with a mean of zero and standard deviation of one.
+                <code>weights = torch.randn_like(features)</code> creates another tensor with the same shape as features, again containing values from a normal distribution. Finally, <code>bias = torch.randn((1, 1))</code> creates a single value from a normal distribution. PyTorch tensors can be added, multiplied, subtracted, etc, just like Numpy arrays. In general, you'll use PyTorch tensors pretty much the same way you'd use Numpy arrays. They come with some nice benefits though such as GPU acceleration which we'll get to later. For now, use the generated data to calculate the output of this simple single layer network.
+                </p>
+            </article>
         </section>
 
         <!-- Neural Networks in PyTorch Section -->
         <section class="main-section" id="Neural_Networks_in_PyTorch">
             <header>Neural Networks in PyTorch</header>
+            <article>
+                <p>Deep learning networks tend to be massive with dozens or hundreds of layers, that's where the term "deep" comes from. You can build one of these deep networks using only weight matrices as we did in the previous notebook, but in general it's very cumbersome and difficult to implement. PyTorch has a nice module nn that provides a nice way to efficiently build large neural networks.</p>
+                <pre>
+                    <code class="python">
+                        # Import necessary packages
+                        %matplotlib inline
+                        %config InlineBackend.figure_format = 'retina'
+
+                        import numpy as np
+                        import torch
+
+                        import helper
+
+                        import matplotlib.pyplot as plt
+                    </code>
+                </pre>
+                <p>Now we're going to build a larger network that can solve a (formerly) difficult problem, identifying text in an image.</p>
+                <p>Our goal is to build a neural network that can take one of these images and predict the digit in the image. </p>
+                <p>First up, we need to get our dataset. This is provided through the torchvision package. The code below will download the MNIST dataset, then create training and test datasets for us. Don't worry too much about the details here, you'll learn more about this later.</p>
+                <pre>
+                    <code class="python">
+                        ### Run this cell
+                        from torchvision import datasets, transforms
+
+                        # Define a transform to normalize the data
+                        transform = transforms.Compose([transforms.ToTensor(),
+                                                      transforms.Normalize((0.5,), (0.5,)),
+                                                      ])
+
+                        # Download and load the training data
+                        trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
+                        trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+                    </code>
+                </pre>
+            </article>
         </section>
 
         <!-- Training Neural Networks Section -->
         <section class="main-section" id="Training_Neural_Networks">
             <header>Training Neural Networks</header>
+            <article></article>
         </section>
         
         <!-- Fashion-MNIST Section -->
         <section class="main-section" id="Fashion-MNIST">
             <header>Fashion-MNIST</header>
+            <article></article>
         </section>
         
         <!-- Inference and Validation Section -->
         <section class="main-section" id="Inference_and_Validation">
             <header>Inference and Validation</header>
+            <article></article>
         </section>
         
         <!-- Saving and Loading Models Section -->
         <section class="main-section" id="Saving_and_Loading_Models">
             <header>Saving and Loading Models</header>
+            <article></article>
         </section>
         
         <!-- Loading Image Data Section -->
         <section class="main-section" id="Loading_Image_Data">
             <header>Loading Image Data</header>
+            <article></article>
         </section>
         
         <!-- Transfer Leaning Section -->
         <section class="main-section" id="Transfer_Leaning">
             <header>Transfer Leaning</header>
+            <article></article>
         </section>
     </main>
 </body>
