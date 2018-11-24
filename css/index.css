@@ -1,0 +1,43 @@
+body {
+	font-family: 'Open Sans',Arial,sans-serif;
+	box-sizing: border-box;
+}
+
+header {
+	font-size: 32px;
+}
+
+#navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	float: left;
+	width: 300px;
+	height: 100%;
+	border-right: solid #ccc;
+	background-color: #f1f1f1;
+	text-align: center;
+}
+
+#navbar ul {
+	height: 90%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-align: left;
+}
+
+#navbar li {
+	border: 1px solid #ccc;
+	padding: 10px;
+	padding-left: 45px;
+	list-style-type: none;
+	position: relative;
+	font-size: 18px;
+	left: -55px;
+	width: 100%;
+}
+
+#navbar a {
+	color: #000;
+	text-decoration: none;
+}
