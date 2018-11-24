@@ -5,6 +5,8 @@ body {
 
 header {
 	font-size: 32px;
+	text-align: center;
+	margin: 10px;
 }
 
 #navbar {
@@ -40,4 +42,36 @@ header {
 #navbar a {
 	color: #000;
 	text-decoration: none;
+}
+
+#main-doc header {
+	text-align: left;
+	margin: 0;
+}
+
+#main-doc {
+	position: /*absolute*/;
+	padding: 20px;
+	margin-bottom: 110px;
+	margin-left: 300px;
+}
+
+section article {
+	margin: 15px;
+	font-size: 16px;
+}
+
+code {
+	display: block;
+	text-align: left;
+	white-space: pre;
+	position: relative;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1;
+	background-color: #f1f1f1;
+	padding: 8px;
+	margin: 10px;
+	border-radius: 5px;
+	max-width: 95%;
 }

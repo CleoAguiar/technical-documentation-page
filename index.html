@@ -49,34 +49,35 @@
                 <h1>Tensors</h1>
                 <p>It turns out neural network computations are just a bunch of linear algebra operations on tensors, a generalization of matrices. A vector is a 1-dimensional tensor, a matrix is a 2-dimensional tensor, an array with three indices is a 3-dimensional tensor (RGB color images for example). The fundamental data structure for neural networks are tensors and PyTorch (as well as pretty much every other deep learning framework) is built around tensors.</p>
                 <p>With the basics covered, it's time to explore how we can use PyTorch to build a simple neural network.</p>
-                <pre>
+                <!--<pre> --> 
                     <code class="python">
-                            import torch
-                            def activation(x):
-                                """ Sigmoid activation function
-                                    Arguments
-                                    ---------
-                                    x: torch.Tensor
-                                """
-                                return 1/(1+torch.exp(-x))
+import torch
+def activation(x):
+    """ Sigmoid activation function
+        Arguments
+        ---------
+        x: torch.Tensor
+    """
+    return 1/(1+torch.exp(-x))
                     </code>
-                </pre>
+                <!--</pre> -->
 
-                 <pre>
+                 <!--<pre> -->
                     <code class="python">
-                            ### Generate some data
-                            torch.manual_seed(7) # Set the random seed so things are predictable
+### Generate some data
+torch.manual_seed(7) 
+# Set the random seed so things are predictable
 
-                            # Features are 3 random normal variables
-                            features = torch.randn((1, 5))
-                            # True weights for our data, random normal variables again
-                            weights = torch.randn_like(features)
-                            # and a true bias term
-                            bias = torch.randn((1, 1))
+# Features are 3 random normal variables
+features = torch.randn((1, 5))
+# True weights for our data, random normal variables again
+weights = torch.randn_like(features)
+# and a true bias term
+bias = torch.randn((1, 1))
                     </code>
-                </pre>
-                <p>Above I generated data we can use to get the output of our simple network. This is all just random for now, going forward we'll start using normal data. Going through each relevant line: <code>features = torch.randn((1, 5))</code> creates a tensor with shape (1, 5), one row and five columns, that contains values randomly distributed according to the normal distribution with a mean of zero and standard deviation of one.
-                <code>weights = torch.randn_like(features)</code> creates another tensor with the same shape as features, again containing values from a normal distribution. Finally, <code>bias = torch.randn((1, 1))</code> creates a single value from a normal distribution. PyTorch tensors can be added, multiplied, subtracted, etc, just like Numpy arrays. In general, you'll use PyTorch tensors pretty much the same way you'd use Numpy arrays. They come with some nice benefits though such as GPU acceleration which we'll get to later. For now, use the generated data to calculate the output of this simple single layer network.
+                <!--</pre> -->
+                <p>Above I generated data we can use to get the output of our simple network. This is all just random for now, going forward we'll start using normal data. Going through each relevant line: <i>features = torch.randn((1, 5))</i> creates a tensor with shape (1, 5), one row and five columns, that contains values randomly distributed according to the normal distribution with a mean of zero and standard deviation of one.
+                <i>weights = torch.randn_like(features)</i> creates another tensor with the same shape as features, again containing values from a normal distribution. Finally, <i>bias = torch.randn((1, 1))</i> creates a single value from a normal distribution. PyTorch tensors can be added, multiplied, subtracted, etc, just like Numpy arrays. In general, you'll use PyTorch tensors pretty much the same way you'd use Numpy arrays. They come with some nice benefits though such as GPU acceleration which we'll get to later. For now, use the generated data to calculate the output of this simple single layer network.
                 </p>
             </article>
         </section>
@@ -86,38 +87,40 @@
             <header>Neural Networks in PyTorch</header>
             <article>
                 <p>Deep learning networks tend to be massive with dozens or hundreds of layers, that's where the term "deep" comes from. You can build one of these deep networks using only weight matrices as we did in the previous notebook, but in general it's very cumbersome and difficult to implement. PyTorch has a nice module nn that provides a nice way to efficiently build large neural networks.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        # Import necessary packages
-                        %matplotlib inline
-                        %config InlineBackend.figure_format = 'retina'
+# Import necessary packages
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
 
-                        import numpy as np
-                        import torch
+import numpy as np
+import torch
 
-                        import helper
+import helper
 
-                        import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
                     </code>
-                </pre>
+                <!--</pre> -->
                 <p>Now we're going to build a larger network that can solve a (formerly) difficult problem, identifying text in an image.</p>
                 <p>Our goal is to build a neural network that can take one of these images and predict the digit in the image. </p>
                 <p>First up, we need to get our dataset. This is provided through the torchvision package. The code below will download the MNIST dataset, then create training and test datasets for us. Don't worry too much about the details here, you'll learn more about this later.</p>
-                <pre>
-                    <code class="python">
-                        ### Run this cell
-                        from torchvision import datasets, transforms
+                <!--<pre> -->
+<code class="python">
+### Run this cell
+from torchvision import datasets, transforms
 
-                        # Define a transform to normalize the data
-                        transform = transforms.Compose([transforms.ToTensor(),
-                                                      transforms.Normalize((0.5,), (0.5,)),
-                                                      ])
+# Define a transform to normalize the data
+transform = transforms.Compose([transforms.ToTensor(),
+                              transforms.Normalize((0.5,), (0.5,)),
+                              ])
 
-                        # Download and load the training data
-                        trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
-                        trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+# Download and load the training data
+trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, 
+                         train=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64,
+                                         shuffle=True)
                     </code>
-                </pre>
+                <!--</pre> -->
             </article>
         </section>
 
@@ -131,13 +134,13 @@
                 <p>By minimizing this loss with respect to the network parameters, we can find configurations where the loss is at a minimum and the network is able to predict the correct labels with high accuracy. We find this minimum using a process called gradient descent. The gradient is the slope of the loss function and points in the direction of fastest change. To get to the minimum in the least amount of time, we then want to follow the gradient (downwards). You can think of this like descending a mountain by following the steepest slope to the base.</p>
                 <h1>Training the network!</h1>
                 <p>There's one last piece we need to start training, an optimizer that we'll use to update the weights with the gradients. We get these from PyTorch's optim package. For example we can use stochastic gradient descent with optim.SGD. You can see how to define an optimizer below.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        from torch import optim
-                        # Optimizers require the parameters to optimize and a learning rate
-                        optimizer = optim.SGD(model.parameters(), lr=0.01)
+from torch import optim
+# Optimizers require the parameters to optimize and a learning rate
+optimizer = optim.SGD(model.parameters(), lr=0.01)
                     </code>
-                </pre>
+                <!--</pre> -->
                 <p>Now we know how to use all the individual parts so it's time to see how they work together. Let's consider just one learning step before looping through all the data. The general process with PyTorch:</p>
                 <ul>
                     <li>Make a forward pass through the network</li>
@@ -155,38 +158,38 @@
                 <p>Now it's your turn to build and train a neural network. You'll be using the Fashion-MNIST dataset, a drop-in replacement for the MNIST dataset. MNIST is actually quite trivial with neural networks where you can easily achieve better than 97% accuracy. Fashion-MNIST is a set of 28x28 greyscale images of clothes. It's more complex than MNIST, so it's a better representation of the actual performance of your network, and a better representation of datasets you'll use in the real world.</p>
                 <p>In this notebook, you'll build your own neural network. For the most part, you could just copy and paste the code from Part 3, but you wouldn't be learning. It's important for you to write the code yourself and get it to work. Feel free to consult the previous notebooks though as you work through this.</p>
                 <p>First off, let's load the dataset through torchvision.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        import torch
-                        from torchvision import datasets, transforms
-                        import helper
+import torch
+from torchvision import datasets, transforms
+import helper
 
-                        # Define a transform to normalize the data
-                        transform = transforms.Compose([transforms.ToTensor(),
-                                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-                        # Download and load the training data
-                        trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
-                        trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+# Define a transform to normalize the data
+transform = transforms.Compose([transforms.ToTensor(),
+                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+# Download and load the training data
+trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
-                        # Download and load the test data
-                        testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
-                        testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+# Download and load the test data
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
                     </code>
-                </pre>
+                <!--</pre> -->
                 <p>Here we can see one of the images.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        image, label = next(iter(trainloader))
-                        helper.imshow(image[0,:]);
+image, label = next(iter(trainloader))
+helper.imshow(image[0,:]);
                     </code>
-                </pre>
+                <!--</pre> -->
                 <h1>Train the network</h1>
-                <p>Now you should create your network and train it. First you'll want to define the criterion ( something like <code>nn.CrossEntropyLoss</code>) and the optimizer (typically <code>optim.SGD</code> or <code>optim.Adam</code>).</p>
+                <p>Now you should create your network and train it. First you'll want to define the criterion ( something like <i>nn.CrossEntropyLoss</i>) and the optimizer (typically <i>optim.SGD</i> or <i>optim.Adam</i>).</p>
                 <p>Then write the training code. Remember the training pass is a fairly straightforward process:</p>
                 <ul>
                     <li>Make a forward pass through the network to get the logits</li>
                     <li>Use the logits to calculate the loss</li>
-                    <li>Perform a backward pass through the network with <code>loss.backward()</code> to calculate the gradients</li>
+                    <li>Perform a backward pass through the network with <i>loss.backward()</i> to calculate the gradients</li>
                     <li>Take a step with the optimizer to update the weights</li>
                 </ul>
             </article>
@@ -197,30 +200,30 @@
             <header>Inference and Validation</header>
             <article>
               <p>Now that you have a trained network, you can use it for making predictions. This is typically called inference, a term borrowed from statistics. However, neural networks have a tendency to perform too well on the training data and aren't able to generalize to data that hasn't been seen before. This is called overfitting and it impairs inference performance. To test for overfitting while training, we measure the performance on data not in the training set called the validation set. We avoid overfitting through regularization such as dropout while monitoring the validation performance during training. In this notebook, I'll show you how to do this in PyTorch.</p>  
-              <p>As usual, let's start by loading the dataset through torchvision. You'll learn more about torchvision and loading data in a later part. This time we'll be taking advantage of the test set which you can get by setting <code>train=False</code> here:</p>
-              <pre>
+              <p>As usual, let's start by loading the dataset through torchvision. You'll learn more about torchvision and loading data in a later part. This time we'll be taking advantage of the test set which you can get by setting <i>train=False</i> here:</p>
+              <!--<pre> -->
                   <code class="python">
-                    testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
                   </code>
-              </pre>
+              <!--</pre> -->
               <p>The test set contains images just like the training set. Typically you'll see 10-20% of the original dataset held out for testing and validation with the rest being used for training.</p>
-              <pre>
+              <!--<pre> -->
                   <code class="python">
-                    import torch
-                    from torchvision import datasets, transforms
+import torch
+from torchvision import datasets, transforms
 
-                    # Define a transform to normalize the data
-                    transform = transforms.Compose([transforms.ToTensor(),
-                                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-                    # Download and load the training data
-                    trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
-                    trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+# Define a transform to normalize the data
+transform = transforms.Compose([transforms.ToTensor(),
+                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+# Download and load the training data
+trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
-                    # Download and load the test data
-                    testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
-                    testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+# Download and load the test data
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
                   </code>
-              </pre>
+              <!--</pre> -->
             </article>
         </section>
         
@@ -229,44 +232,44 @@
             <header>Saving and Loading Models</header>
             <article>
                 <p>I'll show you how to save and load models with PyTorch. This is important because you'll often want to load previously trained models to use in making predictions or to continue training on new data.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        %matplotlib inline
-                        %config InlineBackend.figure_format = 'retina'
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
 
-                        import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-                        import torch
-                        from torch import nn
-                        from torch import optim
-                        import torch.nn.functional as F
-                        from torchvision import datasets, transforms
+import torch
+from torch import nn
+from torch import optim
+import torch.nn.functional as F
+from torchvision import datasets, transforms
 
-                        import helper
-                        import fc_model
+import helper
+import fc_model
                     </code>
-                </pre>
-                <pre>
+                <!--</pre> -->
+                <!--<pre> -->
                     <code class="python">
-                        # Define a transform to normalize the data
-                        transform = transforms.Compose([transforms.ToTensor(),
-                                                        transforms.Normalize((0.5,), (0.5,))])
-                        # Download and load the training data
-                        trainset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=True, transform=transform)
-                        trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+# Define a transform to normalize the data
+transform = transforms.Compose([transforms.ToTensor(),
+                                transforms.Normalize((0.5,), (0.5,))])
+# Download and load the training data
+trainset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
-                        # Download and load the test data
-                        testset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=False, transform=transform)
-                        testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+# Download and load the test data
+testset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=False, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
                     </code>
-                </pre>
+                <!--</pre> -->
                 Here we can see one of the images.
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        image, label = next(iter(trainloader))
-                        helper.imshow(image[0,:]);
+image, label = next(iter(trainloader))
+helper.imshow(image[0,:]);
                     </code>
-                </pre>
+                <!--</pre> -->
             </article>
         </section>
         
@@ -276,19 +279,19 @@
             <article>
                 <p>So far we've been working with fairly artificial datasets that you wouldn't typically be using in real projects. Instead, you'll likely be dealing with full-sized images like you'd get from smart phone cameras. In this notebook, we'll look at how to load images and use them to train neural networks.</p>
                 <p>We'll use this dataset to train a neural network that can differentiate between cats and dogs. These days it doesn't seem like a big accomplishment, but five years ago it was a serious challenge for computer vision systems.</p>
-                <pre>
+                <!--<pre> -->
                     <code class="python">
-                        %matplotlib inline
-                        %config InlineBackend.figure_format = 'retina'
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
 
-                        import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-                        import torch
-                        from torchvision import datasets, transforms
+import torch
+from torchvision import datasets, transforms
 
-                        import helper
+import helper
                     </code>
-                </pre>
+                <!--</pre> -->
             </article>
         </section>
         
@@ -299,21 +302,21 @@
                 <p>In this notebook, you'll learn how to use pre-trained networks to solved challenging problems in computer vision. Specifically, you'll use networks trained on ImageNet available from torchvision.</p>
                 <p>ImageNet is a massive dataset with over 1 million labeled images in 1000 categories. It's used to train deep neural networks using an architecture called convolutional layers. I'm not going to get into the details of convolutional networks here.</p>
                 <p>Once trained, these models work astonishingly well as feature detectors for images they weren't trained on. Using a pre-trained network on images not in the training set is called transfer learning. Here we'll use transfer learning to train a network that can classify our cat and dog photos with near perfect accuracy.</p>
-                <p>With <code>torchvision.models</code> you can download these pre-trained networks and use them in your applications. We'll include models in our imports now.</p>
-                <pre>
+                <p>With <i>torchvision.models</i> you can download these pre-trained networks and use them in your applications. We'll include models in our imports now.</p>
+                <!--<pre> -->
                     <code class="python">
-                        %matplotlib inline
-                        %config InlineBackend.figure_format = 'retina'
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
 
-                        import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-                        import torch
-                        from torch import nn
-                        from torch import optim
-                        import torch.nn.functional as F
-                        from torchvision import datasets, transforms, models
+import torch
+from torch import nn
+from torch import optim
+import torch.nn.functional as F
+from torchvision import datasets, transforms, models
                     </code>
-                </pre>
+                <!--</pre> -->
             </article>
         </section>
     </main>
