@@ -50,7 +50,7 @@ header {
 }
 
 #main-doc {
-	position: /*absolute*/;
+	position: absolute;
 	padding: 20px;
 	margin-bottom: 110px;
 	margin-left: 300px;
@@ -59,6 +59,7 @@ header {
 section article {
 	margin: 15px;
 	font-size: 16px;
+	text-align: justify;
 }
 
 code {

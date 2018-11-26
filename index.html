@@ -166,14 +166,20 @@ import helper
 
 # Define a transform to normalize the data
 transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                                transforms.Normalize((0.5, 0.5, 0.5), 
+                                (0.5, 0.5, 0.5))])
 # Download and load the training data
-trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
+trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', 
+                                download=True, train=True, 
+                                transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
 # Download and load the test data
-testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', 
+                                download=True, train=False,
+                                transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, 
+                                        shuffle=True)
                     </code>
                 <!--</pre> -->
                 <p>Here we can see one of the images.</p>
@@ -203,7 +209,9 @@ helper.imshow(image[0,:]);
               <p>As usual, let's start by loading the dataset through torchvision. You'll learn more about torchvision and loading data in a later part. This time we'll be taking advantage of the test set which you can get by setting <i>train=False</i> here:</p>
               <!--<pre> -->
                   <code class="python">
-testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', 
+                                download=True, train=False, 
+                                transform=transform)
                   </code>
               <!--</pre> -->
               <p>The test set contains images just like the training set. Typically you'll see 10-20% of the original dataset held out for testing and validation with the rest being used for training.</p>
@@ -214,14 +222,21 @@ from torchvision import datasets, transforms
 
 # Define a transform to normalize the data
 transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                                transforms.Normalize((0.5, 0.5, 0.5), 
+                                (0.5, 0.5, 0.5))])
 # Download and load the training data
-trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+trainset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', 
+                                download=True, train=True, 
+                                transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64,
+                                         shuffle=True)
 
 # Download and load the test data
-testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train=False, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', 
+                               download=True, train=False, 
+                               transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, 
+                                        shuffle=True)
                   </code>
               <!--</pre> -->
             </article>
@@ -255,12 +270,16 @@ import fc_model
 transform = transforms.Compose([transforms.ToTensor(),
                                 transforms.Normalize((0.5,), (0.5,))])
 # Download and load the training data
-trainset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+trainset = datasets.FashionMNIST('F_MNIST_data/', download=True, 
+                                train=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, 
+                                         shuffle=True)
 
 # Download and load the test data
-testset = datasets.FashionMNIST('F_MNIST_data/', download=True, train=False, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+testset = datasets.FashionMNIST('F_MNIST_data/', download=True, 
+                               train=False, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, 
+                                        shuffle=True)
                     </code>
                 <!--</pre> -->
                 Here we can see one of the images.
