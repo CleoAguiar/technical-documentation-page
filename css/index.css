@@ -5,15 +5,15 @@ body {
 
 header {
 	font-size: 32px;
-	text-align: center;
 	margin: 10px;
+	text-align: center;
 }
 
 #navbar {
 	position: fixed;
+	min-width: 290px;
 	top: 0;
 	left: 0;
-	float: left;
 	width: 300px;
 	height: 100%;
 	border-right: solid #ccc;
@@ -22,7 +22,7 @@ header {
 }
 
 #navbar ul {
-	height: 90%;
+	height: 88%;
 	overflow-y: auto;
 	overflow-x: hidden;
 	text-align: left;
@@ -30,6 +30,7 @@ header {
 
 #navbar li {
 	border: 1px solid #ccc;
+	border-bottom-width: 0px;
 	padding: 10px;
 	padding-left: 45px;
 	list-style-type: none;
@@ -51,9 +52,9 @@ header {
 
 #main-doc {
 	position: absolute;
+	margin-left: 300px;
 	padding: 20px;
 	margin-bottom: 110px;
-	margin-left: 300px;
 }
 
 section article {
@@ -74,5 +75,34 @@ code {
 	padding: 8px;
 	margin: 10px;
 	border-radius: 5px;
-	max-width: 95%;
+	overflow-x: auto;
+}
+
+/*Mobile phone*/
+@media only screen and (max-width: 815px) {
+	#navbar ul {
+		border: 1px solid;
+		height: 207px;
+		text-align: center;
+	}
+
+	#navbar {
+		position: absolute;
+		top: 0;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		max-height: 275px;
+		border: none;
+		z-index: 1;
+		border-bottom: 2px solid #ccc;
+		background-color: #f1f1f1;
+		text-align: center;
+	}
+
+	#main-doc {
+		position: relative;
+		margin-left: 0px;
+		margin-top: 270px;
+	}
 }
